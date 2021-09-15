@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="lib/jquery-3.6.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/addr.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function () {
+				//开始时显示所有的省份
+				$.each(temp,function (i,d) {
+					var $text = $("<option>"+d.label+"</option>");
+					$text.appendTo($("#province"));
+				});
+				//更换省份后的操作
+				$("#province").change(function () {
+					//清空城市和县城选择项
+					$("#city").html("<option disabled selected>请选择</option>");
+					$("#county").html("<option disabled selected>请选择</option>");
+					//拿到省份内容
+					var value = $("#province").val();
+					//遍历所有的城市
+					$.each(temp,function (i,d) {
+						if(d.label===value){
+							$.each(d.children,function (j,e) {
+								var $city = $("<option>"+e.label+"</option>");
+								$city.appendTo($("#city"));
+							});
+						}
+					});
+				});
+				//更换城市后的操作
+				$("#city").change(function () {
+					//清空县城选择项
+					$("#county").html("<option disabled selected>请选择</option>");
+					//拿到省份内容
+					var value = $("#province").val();
+					//拿到城市内容
+					var value1 = $("#city").val();
+					//遍历所有的省份
+					$.each(temp,function (i,d) {
+						if(d.label===value){
+							$.each(d.children,function (j,e) {
+								if(e.label===value1){
+									$.each(e.children,function (k,f) {
+										var $county = $("<option>"+f.label+"</option>");
+										$county.appendTo($("#county"));
+									});
+								}
+							});
+						}
+					});
+				});
+			}
+		</script>
+	</head>
+	<body>
+		<select id="province">
+			<option disabled selected>请选择</option>
+		</select>省
+		<select id="city">
+			<option disabled selected>请选择</option>
+		</select>市
+		<select id="county">
+			<option disabled selected>请选择</option>
+		</select>区县
+	</body>
+</html>

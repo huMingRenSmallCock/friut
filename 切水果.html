@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>切水果游戏</title>
+    <style type="text/css">
+        div>div:hover{
+            color: #FF5500;
+        }
+        :active{
+            color: blue;
+        }
+        .class1{
+            border: 4px solid black;
+            width: 800px;
+            height: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 6px;
+            overflow: hidden;
+            position:relative;
+        }
+        div.class3 {
+            border: 2px solid black;
+            background-color: #AAAAAA;
+            width: 300px;
+            height: 150px;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 4px;
+        }
+
+        div.class4 {
+            margin-top: 15px;
+            margin-left: 100px;
+        }
+
+        div.class5 {
+            margin-top: 15px;
+            margin-left: 60px;
+        }
+
+        div > div > input {
+            border: 3px solid black;
+            background-color: skyblue;
+            width: 60px;
+            height: 40px;
+            margin-left: 20px;
+            border-radius: 4px;
+            font-family: "楷体";
+            font-size: 20px;
+            text-align: center;
+
+        }
+        .class6{
+            width: 100px;
+            position: absolute;
+            overflow: hidden;
+            margin-top: 500px;
+        }
+        .class4>#score{
+            color: #FF5500;
+        }
+        .class4>#time{
+            color: #FF5500;
+        }
+    </style>
+    <script type="text/javascript" src="lib/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        var myTimer;
+        var myTimer1;
+        var value = 0;
+        var time = 0;
+        $(function () {
+            $(".class7").click(function () {
+                play();
+                $(".class7").prop("dzisabled",true);
+            });
+            $(".class8").click(function () {
+                close1();
+                $(".class7").prop("disabled",false);
+            });
+        });
+        function close1() {
+            clearInterval(myTimer1);
+            clearInterval(myTimer);
+            $(".class4>#time").html(0);
+            $(".class4>#score").html(0);
+            alert("你的分数为"+value+";用时"+time+"秒");
+        }
+        function play() {
+             myTimer1 = setInterval(function () {
+                time += 1;
+                 $(".class4>#time").html(time);
+             },1000);
+             myTimer = setInterval(function () {
+                 var val = parseInt(Math.random()*7+1);
+                 var str = "pic/"+val+".jpg";
+                 var $img = $("<img  class=\"class6\"/>");
+                 $img.attr("src",str);
+                 $img.val(val);
+                 var left = 800*Math.random();
+                 var top = 500;
+                 var flag = true;
+                 var leftFlag = true;
+                 if (left > 400){
+                     leftFlag = false;
+                 }
+                 var myTimer1 = setInterval(function () {
+                     if (leftFlag){
+                         left += 12*Math.random()+8;
+                     }else {
+                         left -= 12*Math.random()+8;
+                     }
+                     if (top<= 150*Math.random()+20){
+                         flag=false;
+                     }
+                     var a = 0;
+                     if (top<100){
+                         a = 0;
+                     }else if(top>=100&&top<200){
+                         a = 8;
+                     }else if(top>=200&&top<300){
+                         a = 16;
+                     }else if(top>=300&&top<400){
+                         a = 24;
+                     }else {
+                         a = 32;
+                     }
+                     if (flag){
+                         top -= 13*Math.random()+a;
+                     }else{
+                         top += 13*Math.random()+a;
+                     }
+                     $img.css("margin-left",left);
+                     $img.css("margin-top",top);
+                     if(left>800||top>500){
+                         clearInterval(myTimer1);
+                         $img.css("display","none");
+                     }
+                 },100);
+                 $img.attr("onclick","clickfun(this)");
+                 $img.appendTo($(".class1"));
+             },700);
+        }
+        //点击事件
+        function clickfun(myObj) {
+            var val = $(myObj).val();
+            var str1 = "ppic/" + val + ".jpg";
+            if (val==5){
+                $(".class1").empty();
+                $(myObj).css("width","300px");
+                $(myObj).attr("src", str1);
+                $(myObj).appendTo($(".class1"));
+                setTimeout(function () {
+                    $(myObj).css("display", "none");
+                }, 400);
+            }else {
+                $(myObj).attr("src", str1);
+                setTimeout(function () {
+                    $(myObj).css("display", "none");
+                    value++;
+                    $(".class4>#score").html(value);
+                }, 300);
+            }
+        }
+    </script>
+</head>
+<body>
+<!--   <img  class="class6" src="pic/1.jpg"/>-->
+     <div class="class1">
+     </div>
+     <div class="class3">
+         <div class="class4"><span>时间：</span><span id="time">0</span>&ensp;<span>秒</span></div>
+         <div class="class4"><span>积分：</span><span id="score">0</span>&ensp;<span>分</span></div>
+         <div class="class5">
+             <input type="button" value="开始" class="class7"/>
+             <input type="button" value="结束" class="class8"/>
+         </div>
+     </div>
+     <p>游戏规则：点击水果加1分，点击炸弹屏幕中的所有水果都会消失，只能等待水果重新出现</p>
+</body>
+</html>
